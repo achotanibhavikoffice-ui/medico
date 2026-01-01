@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Complete Healthcare Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .medicine-card {
+            transition: all 0.3s ease;
+        }
+        .medicine-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .patient-badge { background-color: #dbeafe; color: #1e40af; }
+        .doctor-badge { background-color: #dcfce7; color: #166534; }
+        .pharmacy-badge { background-color: #fef3c7; color: #92400e; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+            <div class="text-center mb-8">
+                <div class="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-2xl">🏥</span>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">MediCare</h1>
+                <p class="text-gray-600">Complete Healthcare Platform</p>
+            </div>
+            
+            <div class="space-y-4">
+                <button onclick="showLogin()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+                    Login
+                </button>
+                <button onclick="showSignup()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition duration-200">
+                    Create Account
+                </button>
+                <p class="text-xs text-gray-500 text-center">Demo Version - Your data is stored locally</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="hidden min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+            <div class="text-center mb-8">
+                <div class="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-2xl">🏥</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+                <p class="text-gray-600">Sign in to your MediCare account</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="loginEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input type="text" id="loginUsername" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your username">
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+                    Sign In
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <button onclick="showSignup()" class="text-blue-500 hover:text-blue-600 text-sm">
+                    Don't have an account? Sign up
+                </button>
+                <br>
+                <button onclick="showWelcome()" class="text-gray-500 hover:text-gray-600 text-sm mt-2">
+                    ← Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Screen -->
+    <div id="signupScreen" class="hidden min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+            <div class="text-center mb-8">
+                <div class="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-2xl">🏥</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Create Account</h2>
+                <p class="text-gray-600">Join MediCare today</p>
+            </div>
+            
+            <form id="signupForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="signupName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your full name">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="signupEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input type="text" id="signupUsername" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Choose a username">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                    <select id="signupRole" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Select your role</option>
+                        <option value="patient">Patient</option>
+                        <option value="doctor">Doctor</option>
+                        <option value="pharmacy">Pharmacy</option>
+                    </select>
+                </div>
+                
+                <div id="roleSpecificFields"></div>
+                
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <button onclick="showLogin()" class="text-blue-500 hover:text-blue-600 text-sm">
+                    Already have an account? Sign in
+                </button>
+                <br>
+                <button onclick="showWelcome()" class="text-gray-500 hover:text-gray-600 text-sm mt-2">
+                    ← Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Dashboard -->
+    <div id="patientDashboard" class="hidden min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white text-lg">👤</span>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">Patient Dashboard</h1>
+                            <span class="role-badge patient-badge">Patient</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-600" id="currentTime"></span>
+                        <span class="text-sm text-gray-600">Welcome, <span id="currentUserName">User</span></span>
+                        <button onclick="logout()" class="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Patient Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <span class="text-green-600 text-xl">💊</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">My Medicines</p>
+                            <p class="text-2xl font-bold text-gray-900" id="patientMedicines">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <span class="text-blue-600 text-xl">📅</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Appointments</p>
+                            <p class="text-2xl font-bold text-gray-900" id="patientAppointments">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-3 rounded-full">
+                            <span class="text-orange-600 text-xl">🩺</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Health Records</p>
+                            <p class="text-2xl font-bold text-gray-900" id="patientRecords">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <span class="text-purple-600 text-xl">🏥</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Nearby Pharmacies</p>
+                            <p class="text-2xl font-bold text-gray-900">5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Tabs -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6">
+                        <button onclick="switchPatientTab('medicines')" id="patientMedicinesTab" class="py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600">
+                            💊 My Medicines
+                        </button>
+                        <button onclick="switchPatientTab('search')" id="patientSearchTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            🔍 Medicine Search
+                        </button>
+                        <button onclick="switchPatientTab('appointments')" id="patientAppointmentsTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            📅 Appointments
+                        </button>
+                        <button onclick="switchPatientTab('records')" id="patientRecordsTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            📋 Health Records
+                        </button>
+                        <button onclick="switchPatientTab('pharmacy')" id="patientPharmacyTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            🏪 Pharmacy
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Patient Tab Contents -->
+                <div id="patientMedicinesContent" class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">My Medicines</h3>
+                        <button onclick="openAddMedicineModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium">
+                            + Add Medicine
+                        </button>
+                    </div>
+                    <div id="patientMedicineList">
+                        <div class="text-center text-gray-500 py-8">
+                            <span class="text-4xl mb-4 block">💊</span>
+                            <p>No medicines added yet. Click "Add Medicine" to get started!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="patientSearchContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Medicine Search & Information</h3>
+                    <div class="mb-6">
+                        <div class="flex space-x-4">
+                            <input type="text" id="medicineSearchInput" placeholder="Search by medicine name, salt, or brand..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button onclick="searchMedicines()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                    <div id="medicineSearchResults"></div>
+                </div>
+
+                <div id="patientAppointmentsContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Book Appointment</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Find Doctors</h4>
+                            <div class="space-y-3">
+                                <select id="specialtySelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="">All Specialties</option>
+                                    <option value="cardiology">Cardiology</option>
+                                    <option value="dermatology">Dermatology</option>
+                                    <option value="neurology">Neurology</option>
+                                    <option value="orthopedics">Orthopedics</option>
+                                    <option value="pediatrics">Pediatrics</option>
+                                    <option value="general">General Medicine</option>
+                                </select>
+                                <button onclick="searchDoctors()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg">
+                                    Find Available Doctors
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">My Appointments</h4>
+                            <div id="patientAppointmentsList">
+                                <p class="text-gray-500 text-sm">No appointments scheduled</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="doctorSearchResults" class="mt-6"></div>
+                </div>
+
+                <div id="patientRecordsContent" class="hidden p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Health Records</h3>
+                        <button onclick="openAddRecordModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium">
+                            + Add Record
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div class="lg:col-span-2">
+                            <h4 class="font-medium text-gray-700 mb-3">My Health Records</h4>
+                            <div id="healthRecordsList" class="space-y-3 max-h-96 overflow-y-auto">
+                                <div class="text-center text-gray-500 py-8">
+                                    <span class="text-4xl mb-4 block">📋</span>
+                                    <p>No health records yet. Click "Add Record" to start tracking!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Quick Actions</h4>
+                            <div class="space-y-3">
+                                <button onclick="openHealthTracker('bmi')" class="w-full text-left p-3 bg-blue-50 rounded-lg hover:bg-blue-100 border border-blue-200">
+                                    <div class="flex items-center">
+                                        <span class="text-blue-600 text-xl mr-3">📊</span>
+                                        <div>
+                                            <p class="font-medium text-blue-800">BMI Calculator</p>
+                                            <p class="text-xs text-blue-600">Calculate body mass index</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="openHealthTracker('bp')" class="w-full text-left p-3 bg-red-50 rounded-lg hover:bg-red-100 border border-red-200">
+                                    <div class="flex items-center">
+                                        <span class="text-red-600 text-xl mr-3">💓</span>
+                                        <div>
+                                            <p class="font-medium text-red-800">Blood Pressure</p>
+                                            <p class="text-xs text-red-600">Log BP readings</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="openHealthTracker('sugar')" class="w-full text-left p-3 bg-orange-50 rounded-lg hover:bg-orange-100 border border-orange-200">
+                                    <div class="flex items-center">
+                                        <span class="text-orange-600 text-xl mr-3">🍯</span>
+                                        <div>
+                                            <p class="font-medium text-orange-800">Blood Sugar</p>
+                                            <p class="text-xs text-orange-600">Track glucose levels</p>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="openHealthTracker('weight')" class="w-full text-left p-3 bg-green-50 rounded-lg hover:bg-green-100 border border-green-200">
+                                    <div class="flex items-center">
+                                        <span class="text-green-600 text-xl mr-3">⚖️</span>
+                                        <div>
+                                            <p class="font-medium text-green-800">Weight Tracker</p>
+                                            <p class="text-xs text-green-600">Monitor weight changes</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <h4 class="font-medium text-gray-700 mb-3">Upload Documents</h4>
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                                    <input type="file" id="prescriptionUpload" accept="image/*,.pdf" class="hidden" onchange="handlePrescriptionUpload(event)">
+                                    <button onclick="document.getElementById('prescriptionUpload').click()" class="text-blue-500 hover:text-blue-600">
+                                        📄 Upload Prescription
+                                    </button>
+                                    <p class="text-sm text-gray-500 mt-2">JPG, PNG, PDF</p>
+                                    <div id="uploadedPrescriptions" class="mt-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="patientPharmacyContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Online Pharmacy</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Order Medicines</h4>
+                            <div id="medicineCart" class="space-y-3">
+                                <p class="text-gray-500 text-sm">Your cart is empty</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Nearby Pharmacies</h4>
+                            <div id="nearbyPharmacies">
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <h5 class="font-medium">Apollo Pharmacy</h5>
+                                        <p class="text-sm text-gray-600">0.5 km away • Open 24/7</p>
+                                        <button class="text-blue-500 text-sm">Get Directions</button>
+                                    </div>
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <h5 class="font-medium">MedPlus</h5>
+                                        <p class="text-sm text-gray-600">1.2 km away • Open till 10 PM</p>
+                                        <button class="text-blue-500 text-sm">Get Directions</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Dashboard -->
+    <div id="doctorDashboard" class="hidden min-h-screen">
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                        <div class="bg-green-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white text-lg">👨‍⚕️</span>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">Doctor Dashboard</h1>
+                            <span class="role-badge doctor-badge">Doctor</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-600" id="doctorCurrentTime"></span>
+                        <span class="text-sm text-gray-600">Dr. <span id="doctorUserName">Doctor</span></span>
+                        <button onclick="logout()" class="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Doctor Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <span class="text-blue-600 text-xl">👥</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Today's Patients</p>
+                            <p class="text-2xl font-bold text-gray-900">12</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <span class="text-green-600 text-xl">📅</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Appointments</p>
+                            <p class="text-2xl font-bold text-gray-900">8</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-3 rounded-full">
+                            <span class="text-orange-600 text-xl">💰</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Today's Earnings</p>
+                            <p class="text-2xl font-bold text-gray-900">₹4,800</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <span class="text-purple-600 text-xl">⭐</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Rating</p>
+                            <p class="text-2xl font-bold text-gray-900">4.8</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Tabs -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6">
+                        <button onclick="switchDoctorTab('appointments')" id="doctorAppointmentsTab" class="py-4 px-1 border-b-2 border-green-500 font-medium text-sm text-green-600">
+                            📅 Appointments
+                        </button>
+                        <button onclick="switchDoctorTab('patients')" id="doctorPatientsTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            👥 Patients
+                        </button>
+                        <button onclick="switchDoctorTab('prescriptions')" id="doctorPrescriptionsTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            📝 Prescriptions
+                        </button>
+                        <button onclick="switchDoctorTab('schedule')" id="doctorScheduleTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            🕒 Schedule
+                        </button>
+                    </nav>
+                </div>
+
+                <div id="doctorAppointmentsContent" class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Today's Appointments</h3>
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">John Doe</h4>
+                                    <p class="text-sm text-gray-600">Age: 35 • Consultation</p>
+                                    <p class="text-sm text-blue-600">10:00 AM - 10:30 AM</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                                        Start Consultation
+                                    </button>
+                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm">
+                                        Reschedule
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Sarah Smith</h4>
+                                    <p class="text-sm text-gray-600">Age: 28 • Follow-up</p>
+                                    <p class="text-sm text-blue-600">11:00 AM - 11:30 AM</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                        View History
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="doctorPatientsContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Patient Management</h3>
+                    <div class="mb-4">
+                        <input type="text" placeholder="Search patients..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">John Doe</h4>
+                                    <p class="text-sm text-gray-600">Last visit: 2 days ago</p>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-600 text-sm">View Records</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="doctorPrescriptionsContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Digital Prescriptions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Create Prescription</h4>
+                            <form id="prescriptionForm" class="space-y-4" onsubmit="generatePrescription(event)">
+                                <input type="text" id="patientNameInput" placeholder="Patient Name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <textarea id="prescriptionDetailsInput" placeholder="Prescription details..." rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">
+                                    Generate Prescription
+                                </button>
+                            </form>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Recent Prescriptions</h4>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    <p class="font-medium">John Doe</p>
+                                    <p class="text-sm text-gray-600">Prescribed today</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="doctorScheduleContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Manage Schedule</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Set Availability</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Working Days</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Mon</label>
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Tue</label>
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Wed</label>
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Thu</label>
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Fri</label>
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Sat</label>
+                                        <label class="flex items-center"><input type="checkbox" class="mr-1"> Sun</label>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                                        <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                                        <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    </div>
+                                </div>
+                                <button class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">
+                                    Update Schedule
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Consultation Fees</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">In-person Consultation</label>
+                                    <input type="number" placeholder="₹500" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Video Consultation</label>
+                                    <input type="number" placeholder="₹300" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                </div>
+                                <button class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">
+                                    Update Fees
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pharmacy Dashboard -->
+    <div id="pharmacyDashboard" class="hidden min-h-screen">
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                        <div class="bg-orange-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white text-lg">🏪</span>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">Pharmacy Dashboard</h1>
+                            <span class="role-badge pharmacy-badge">Pharmacy</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-600" id="pharmacyCurrentTime"></span>
+                        <span class="text-sm text-gray-600"><span id="pharmacyUserName">Pharmacy</span></span>
+                        <button onclick="logout()" class="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Pharmacy Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <span class="text-green-600 text-xl">📦</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Today's Orders</p>
+                            <p class="text-2xl font-bold text-gray-900">24</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <span class="text-blue-600 text-xl">💊</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Inventory Items</p>
+                            <p class="text-2xl font-bold text-gray-900">1,247</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-3 rounded-full">
+                            <span class="text-orange-600 text-xl">⚠️</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Low Stock</p>
+                            <p class="text-2xl font-bold text-gray-900">15</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <span class="text-purple-600 text-xl">💰</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Today's Revenue</p>
+                            <p class="text-2xl font-bold text-gray-900">₹12,450</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pharmacy Tabs -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6">
+                        <button onclick="switchPharmacyTab('orders')" id="pharmacyOrdersTab" class="py-4 px-1 border-b-2 border-orange-500 font-medium text-sm text-orange-600">
+                            📦 Orders
+                        </button>
+                        <button onclick="switchPharmacyTab('inventory')" id="pharmacyInventoryTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            💊 Inventory
+                        </button>
+                        <button onclick="switchPharmacyTab('prescriptions')" id="pharmacyPrescriptionsTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            📝 Prescriptions
+                        </button>
+                        <button onclick="switchPharmacyTab('delivery')" id="pharmacyDeliveryTab" class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700">
+                            🚚 Delivery
+                        </button>
+                    </nav>
+                </div>
+
+                <div id="pharmacyOrdersContent" class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h3>
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Order #12345</h4>
+                                    <p class="text-sm text-gray-600">John Doe • 3 items • ₹450</p>
+                                    <p class="text-sm text-blue-600">Ordered 2 hours ago</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">Pending</span>
+                                    <button onclick="processOrder('12345')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                                        Process
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Order #12344</h4>
+                                    <p class="text-sm text-gray-600">Sarah Smith • 2 items • ₹320</p>
+                                    <p class="text-sm text-blue-600">Ordered 4 hours ago</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Ready</span>
+                                    <button onclick="dispatchOrder('12344')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                        Dispatch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pharmacyInventoryContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Inventory Management</h3>
+                    <div class="mb-4 flex space-x-4">
+                        <input type="text" placeholder="Search medicines..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg">
+                        <button onclick="addMedicine()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg">
+                            Add Medicine
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="border border-gray-200 px-4 py-2 text-left">Medicine</th>
+                                    <th class="border border-gray-200 px-4 py-2 text-left">Stock</th>
+                                    <th class="border border-gray-200 px-4 py-2 text-left">Price</th>
+                                    <th class="border border-gray-200 px-4 py-2 text-left">Status</th>
+                                    <th class="border border-gray-200 px-4 py-2 text-left">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-200 px-4 py-2">Paracetamol 500mg</td>
+                                    <td class="border border-gray-200 px-4 py-2">150</td>
+                                    <td class="border border-gray-200 px-4 py-2">₹5</td>
+                                    <td class="border border-gray-200 px-4 py-2">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">In Stock</span>
+                                    </td>
+                                    <td class="border border-gray-200 px-4 py-2">
+                                        <button class="text-blue-500 hover:text-blue-600 text-sm">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-200 px-4 py-2">Aspirin 75mg</td>
+                                    <td class="border border-gray-200 px-4 py-2">8</td>
+                                    <td class="border border-gray-200 px-4 py-2">₹12</td>
+                                    <td class="border border-gray-200 px-4 py-2">
+                                        <span class="px-2 py-1 bg-red-100 text-red-800 rounded text-sm">Low Stock</span>
+                                    </td>
+                                    <td class="border border-gray-200 px-4 py-2">
+                                        <button onclick="restockMedicine('Aspirin 75mg')" class="text-blue-500 hover:text-blue-600 text-sm">Restock</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="pharmacyPrescriptionsContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Prescription Verification</h3>
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Prescription #RX001</h4>
+                                    <p class="text-sm text-gray-600">Patient: John Doe</p>
+                                    <p class="text-sm text-gray-600">Doctor: Dr. Smith</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="verifyPrescription('RX001')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                                        Verify
+                                    </button>
+                                    <button onclick="rejectPrescription('RX001')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                                        Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pharmacyDeliveryContent" class="hidden p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Delivery Management</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Pending Deliveries</h4>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <p class="font-medium">Order #12345</p>
+                                    <p class="text-sm text-gray-600">John Doe • 123 Main St</p>
+                                    <button class="text-blue-500 text-sm mt-1">Assign Driver</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-3">Delivery Zones</h4>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    <p class="font-medium">Zone A (5km radius)</p>
+                                    <p class="text-sm text-gray-600">Delivery fee: ₹50</p>
+                                </div>
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    <p class="font-medium">Zone B (10km radius)</p>
+                                    <p class="text-sm text-gray-600">Delivery fee: ₹80</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg notification z-50">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Add Medicine Modal -->
+    <div id="addMedicineModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Add Medicine</h3>
+                <button onclick="closeAddMedicineModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="addMedicineForm" onsubmit="addMedicineFromForm(event)" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Medicine Name *</label>
+                        <input type="text" id="medicineName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Brand Name</label>
+                        <input type="text" id="medicineBrand" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dosage *</label>
+                        <input type="text" id="medicineDosage" required placeholder="e.g., 500mg" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Frequency *</label>
+                        <select id="medicineFrequency" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select frequency</option>
+                            <option value="once">Once daily</option>
+                            <option value="twice">Twice daily</option>
+                            <option value="thrice">Three times daily</option>
+                            <option value="custom">Custom times</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="customTimesContainer" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Custom Times</label>
+                    <div id="customTimesList" class="space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="time" class="custom-time px-3 py-2 border border-gray-300 rounded-lg">
+                            <button type="button" onclick="addCustomTime()" class="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Days of Week</label>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="flex items-center"><input type="checkbox" name="days" value="monday" class="mr-1"> Mon</label>
+                        <label class="flex items-center"><input type="checkbox" name="days" value="tuesday" class="mr-1"> Tue</label>
+                        <label class="flex items-center"><input type="checkbox" name="days" value="wednesday" class="mr-1"> Wed</label>
+                        <label class="flex items-center"><input type="checkbox" name="days" value="thursday" class="mr-1"> Thu</label>
+                        <label class="flex items-center"><input type="checkbox" name="days" value="friday" class="mr-1"> Fri</label>
+                        <label class="flex items-center"><input type="checkbox" name="days" value="saturday" class="mr-1"> Sat</label>
+                        <label class="flex items-center"><input type="checkbox" name="days" value="sunday" class="mr-1"> Sun</label>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Prescribed By</label>
+                        <input type="text" id="prescribedBy" placeholder="Dr. Name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+                        <input type="text" id="medicineDuration" placeholder="e.g., 7 days, 2 weeks" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Instructions</label>
+                    <textarea id="medicineInstructions" rows="3" placeholder="Take after meals, avoid alcohol, etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeAddMedicineModal()" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+                        Add Medicine
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Health Record Modal -->
+    <div id="addRecordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Add Health Record</h3>
+                <button onclick="closeAddRecordModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="addRecordForm" onsubmit="addHealthRecord(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Record Type *</label>
+                    <select id="recordType" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" onchange="updateRecordFields()">
+                        <option value="">Select record type</option>
+                        <option value="vitals">Vital Signs</option>
+                        <option value="lab">Lab Results</option>
+                        <option value="appointment">Doctor Visit</option>
+                        <option value="medication">Medication Change</option>
+                        <option value="symptom">Symptoms</option>
+                        <option value="allergy">Allergy</option>
+                        <option value="vaccination">Vaccination</option>
+                        <option value="surgery">Surgery/Procedure</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
+                        <input type="date" id="recordDate" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                        <input type="time" id="recordTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                    </div>
+                </div>
+                
+                <div id="dynamicFields"></div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                    <textarea id="recordNotes" rows="4" placeholder="Additional notes, observations, or details..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeAddRecordModal()" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">
+                        Add Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Medicine Search Modal -->
+    <div id="medicineModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Medicine Information</h3>
+                <button onclick="closeMedicineModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="medicineModalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let medicines = [];
+        let appointments = [];
+        let prescriptions = [];
+        let inventory = [];
+        let healthRecords = [];
+
+        // Sample medicine database
+        const medicineDatabase = [
+            {
+                name: "Paracetamol",
+                brand: "Crocin",
+                salt: "Acetaminophen",
+                uses: "Pain relief, fever reduction",
+                dosage: "500mg-1000mg every 4-6 hours",
+                sideEffects: "Nausea, skin rash (rare)",
+                prescription: false,
+                price: 5,
+                alternatives: ["Ibuprofen", "Aspirin"]
+            },
+            {
+                name: "Aspirin",
+                brand: "Disprin",
+                salt: "Acetylsalicylic acid",
+                uses: "Pain relief, anti-inflammatory, blood thinner",
+                dosage: "75mg-300mg daily",
+                sideEffects: "Stomach irritation, bleeding risk",
+                prescription: false,
+                price: 12,
+                alternatives: ["Paracetamol", "Ibuprofen"]
+            },
+            {
+                name: "Metformin",
+                brand: "Glucophage",
+                salt: "Metformin HCl",
+                uses: "Type 2 diabetes management",
+                dosage: "500mg-1000mg twice daily",
+                sideEffects: "Nausea, diarrhea, metallic taste",
+                prescription: true,
+                price: 25,
+                alternatives: ["Glimepiride", "Sitagliptin"]
+            }
+        ];
+
+        // Role-specific field updates
+        document.getElementById('signupRole').addEventListener('change', function() {
+            const role = this.value;
+            const fieldsContainer = document.getElementById('roleSpecificFields');
+            
+            if (role === 'patient') {
+                fieldsContainer.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                        <input type="number" id="signupAge" min="1" max="120" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your age">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="signupPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your phone number">
+                    </div>
+                `;
+            } else if (role === 'doctor') {
+                fieldsContainer.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Medical License Number</label>
+                        <input type="text" id="signupLicense" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter license number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Specialization</label>
+                        <select id="signupSpecialty" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select Specialty</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="pediatrics">Pediatrics</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Experience (years)</label>
+                        <input type="number" id="signupExperience" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Years of experience">
+                    </div>
+                `;
+            } else if (role === 'pharmacy') {
+                fieldsContainer.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pharmacy License Number</label>
+                        <input type="text" id="signupLicense" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter license number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pharmacy Name</label>
+                        <input type="text" id="signupPharmacyName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter pharmacy name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <textarea id="signupAddress" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter pharmacy address"></textarea>
+                    </div>
+                `;
+            }
+        });
+
+        // User Management
+        function showLogin() {
+            hideAllScreens();
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showSignup() {
+            hideAllScreens();
+            document.getElementById('signupScreen').classList.remove('hidden');
+        }
+
+        function showWelcome() {
+            hideAllScreens();
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+        }
+
+        function hideAllScreens() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('patientDashboard').classList.add('hidden');
+            document.getElementById('doctorDashboard').classList.add('hidden');
+            document.getElementById('pharmacyDashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            hideAllScreens();
+            if (currentUser.role === 'patient') {
+                document.getElementById('patientDashboard').classList.remove('hidden');
+                updatePatientStats();
+            } else if (currentUser.role === 'doctor') {
+                document.getElementById('doctorDashboard').classList.remove('hidden');
+                updateDoctorStats();
+            } else if (currentUser.role === 'pharmacy') {
+                document.getElementById('pharmacyDashboard').classList.remove('hidden');
+                updatePharmacyStats();
+            }
+            updateTime();
+            if (!window.timeInterval) {
+                window.timeInterval = setInterval(updateTime, 1000);
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            showWelcome();
+            showNotification('Logged out successfully');
+        }
+
+        // Login Form Handler
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const username = document.getElementById('signupUsername').value;
+    const role = document.getElementById('signupRole').value;
+    
+    const users = JSON.parse(localStorage.getItem('medicareUsers') || '[]');
+    const existingUser = users.find(u => u.email === email || u.username === username);
+    
+    if (existingUser) {
+        showNotification('User with this email or username already exists!', 'error');
+        return;
+    }
+    
+    const newUser = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        username: username,
+        role: role,
+        createdAt: new Date()
+    };
+
+    // Add role-specific data with initial values set to zero
+    if (role === 'patient') {
+        newUser.age = document.getElementById('signupAge')?.value || 'Not specified';
+        newUser.phone = document.getElementById('signupPhone')?.value || 'Not specified';
+        newUser.medicines = [];
+        newUser.appointments = [];
+        newUser.records = [];
+        // Explicitly setting dashboard counts to 0 for a fresh start
+        newUser.medicineCount = 0;
+        newUser.appointmentCount = 0;
+        newUser.recordCount = 0;
+    } else if (role === 'doctor') {
+        newUser.license = document.getElementById('signupLicense').value;
+        newUser.specialty = document.getElementById('signupSpecialty').value;
+        newUser.experience = document.getElementById('signupExperience')?.value || 0;
+        newUser.patients = [];
+        newUser.schedule = {};
+        // Explicitly setting dashboard counts to 0 for a fresh start
+        newUser.todaysPatients = 0;
+        newUser.todaysAppointments = 0;
+        newUser.todaysEarnings = 0;
+    } else if (role === 'pharmacy') {
+        newUser.license = document.getElementById('signupLicense').value;
+        newUser.pharmacyName = document.getElementById('signupPharmacyName').value;
+        newUser.address = document.getElementById('signupAddress').value;
+        newUser.inventory = [];
+        newUser.orders = [];
+        // Explicitly setting dashboard counts to 0 for a fresh start
+        newUser.todaysOrders = 0;
+        newUser.inventoryItems = 0;
+        newUser.lowStock = 0;
+        newUser.todaysRevenue = 0;
+    }
+    
+    users.push(newUser);
+    localStorage.setItem('medicareUsers', JSON.stringify(users));
+    
+    currentUser = newUser;
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    
+    showDashboard();
+    showNotification(`Account created successfully! Welcome, ${name}!`);
+});
+        function loadUserData() {
+            if (!currentUser) return;
+            
+            // Update user name displays
+            if (currentUser.role === 'patient') {
+                document.getElementById('currentUserName').textContent = currentUser.name;
+            } else if (currentUser.role === 'doctor') {
+                document.getElementById('doctorUserName').textContent = currentUser.name;
+            } else if (currentUser.role === 'pharmacy') {
+                document.getElementById('pharmacyUserName').textContent = currentUser.pharmacyName || currentUser.name;
+            }
+            
+            // Load role-specific data
+            medicines = currentUser.medicines || [];
+            appointments = currentUser.appointments || [];
+            prescriptions = currentUser.prescriptions || [];
+            inventory = currentUser.inventory || [];
+            healthRecords = currentUser.healthRecords || [];
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            document.getElementById('currentTime').textContent = timeString;
+            if (document.getElementById('doctorCurrentTime')) {
+                document.getElementById('doctorCurrentTime').textContent = timeString;
+            }
+            if (document.getElementById('pharmacyCurrentTime')) {
+                document.getElementById('pharmacyCurrentTime').textContent = timeString;
+            }
+        }
+
+        // Patient Tab Management
+        function switchPatientTab(tabName) {
+            // Hide all content
+            document.getElementById('patientMedicinesContent').classList.add('hidden');
+            document.getElementById('patientSearchContent').classList.add('hidden');
+            document.getElementById('patientAppointmentsContent').classList.add('hidden');
+            document.getElementById('patientRecordsContent').classList.add('hidden');
+            document.getElementById('patientPharmacyContent').classList.add('hidden');
+            
+            // Reset all tab styles
+            const tabs = ['patientMedicinesTab', 'patientSearchTab', 'patientAppointmentsTab', 'patientRecordsTab', 'patientPharmacyTab'];
+            tabs.forEach(tab => {
+                document.getElementById(tab).className = 'py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700';
+            });
+            
+            // Show selected content and highlight tab
+            document.getElementById('patient' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Content').classList.remove('hidden');
+            document.getElementById('patient' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').className = 'py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600';
+        }
+
+        // Doctor Tab Management
+        function switchDoctorTab(tabName) {
+            const tabs = ['appointments', 'patients', 'prescriptions', 'schedule'];
+            tabs.forEach(tab => {
+                document.getElementById('doctor' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Content').classList.add('hidden');
+                document.getElementById('doctor' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Tab').className = 'py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700';
+            });
+            
+            document.getElementById('doctor' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Content').classList.remove('hidden');
+            document.getElementById('doctor' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').className = 'py-4 px-1 border-b-2 border-green-500 font-medium text-sm text-green-600';
+        }
+
+        // Pharmacy Tab Management
+        function switchPharmacyTab(tabName) {
+            const tabs = ['orders', 'inventory', 'prescriptions', 'delivery'];
+            tabs.forEach(tab => {
+                document.getElementById('pharmacy' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Content').classList.add('hidden');
+                document.getElementById('pharmacy' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Tab').className = 'py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700';
+            });
+            
+            document.getElementById('pharmacy' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Content').classList.remove('hidden');
+            document.getElementById('pharmacy' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').className = 'py-4 px-1 border-b-2 border-orange-500 font-medium text-sm text-orange-600';
+        }
+
+        // Medicine Search Functionality
+        function searchMedicines() {
+            const query = document.getElementById('medicineSearchInput').value.toLowerCase();
+            const results = medicineDatabase.filter(med => 
+                med.name.toLowerCase().includes(query) ||
+                med.brand.toLowerCase().includes(query) ||
+                med.salt.toLowerCase().includes(query)
+            );
+            
+            const resultsContainer = document.getElementById('medicineSearchResults');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">No medicines found matching your search.</p>';
+                return;
+            }
+            
+            resultsContainer.innerHTML = results.map(med => `
+                <div class="border border-gray-200 rounded-lg p-4 mb-4">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-semibold text-gray-800">${med.name} (${med.brand})</h4>
+                            <p class="text-sm text-gray-600 mb-2">Salt: ${med.salt}</p>
+                            <p class="text-sm text-gray-700 mb-2"><strong>Uses:</strong> ${med.uses}</p>
+                            <p class="text-sm text-gray-700 mb-2"><strong>Dosage:</strong> ${med.dosage}</p>
+                            <p class="text-sm text-gray-700 mb-2"><strong>Side Effects:</strong> ${med.sideEffects}</p>
+                            <p class="text-sm text-gray-700 mb-2"><strong>Alternatives:</strong> ${med.alternatives.join(', ')}</p>
+                            <div class="flex items-center space-x-4 mt-3">
+                                <span class="text-lg font-bold text-green-600">₹${med.price}</span>
+                                <span class="px-2 py-1 rounded text-xs ${med.prescription ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                                    ${med.prescription ? 'Prescription Required' : 'Over the Counter'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ml-4 space-y-2">
+                            <button onclick="addToReminders('${med.name}', '${med.dosage}')" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm">
+                                Add Reminder
+                            </button>
+                            <button onclick="addToCart('${med.name}', ${med.price})" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm">
+                                Add to Cart
+                            </button>
+                            <button onclick="checkInteractions('${med.name}')" class="w-full bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded text-sm">
+                                Check Interactions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToReminders(name, dosage) {
+            if (currentUser.role !== 'patient') {
+                showNotification('Only patients can add medicine reminders', 'error');
+                return;
+            }
+            
+            const medicine = {
+                id: Date.now(),
+                name: name,
+                dosage: dosage,
+                times: ['09:00', '21:00'], // Default times
+                active: true,
+                createdAt: new Date()
+            };
+            
+            medicines.push(medicine);
+            saveUserData();
+            updatePatientStats();
+            showNotification(`${name} added to your reminders!`);
+        }
+
+        let cart = [];
+
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: Date.now(),
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            updateCartDisplay();
+            showNotification(`${name} added to cart for ₹${price}!`);
+        }
+
+        function updateCartDisplay() {
+            const cartContainer = document.getElementById('medicineCart');
+            
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<p class="text-gray-500 text-sm">Your cart is empty</p>';
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartContainer.innerHTML = `
+                <div class="space-y-3">
+                    ${cart.map(item => `
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-sm">${item.name}</p>
+                                <p class="text-xs text-gray-600">₹${item.price} × ${item.quantity}</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="updateCartQuantity(${item.id}, -1)" class="w-6 h-6 bg-gray-200 rounded text-xs">-</button>
+                                <span class="text-sm">${item.quantity}</span>
+                                <button onclick="updateCartQuantity(${item.id}, 1)" class="w-6 h-6 bg-gray-200 rounded text-xs">+</button>
+                                <button onclick="removeFromCart(${item.id})" class="text-red-500 text-xs ml-2">Remove</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                    <div class="border-t pt-3">
+                        <div class="flex justify-between items-center font-medium">
+                            <span>Total: ₹${total}</span>
+                            <button onclick="placeOrder()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm">
+                                Place Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateCartQuantity(itemId, change) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(itemId);
+                } else {
+                    updateCartDisplay();
+                }
+            }
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartDisplay();
+            showNotification('Item removed from cart');
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!', 'error');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const orderItems = [...cart];
+            cart = [];
+            updateCartDisplay();
+            
+            showNotification(`Order placed successfully! Total: ₹${total}. Expected delivery in 2-3 hours.`);
+        }
+
+        let uploadedPrescriptions = [];
+
+        function handlePrescriptionUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const prescription = {
+                id: Date.now(),
+                name: file.name,
+                size: (file.size / 1024).toFixed(1) + ' KB',
+                type: file.type,
+                uploadDate: new Date(),
+                status: 'uploaded'
+            };
+            
+            uploadedPrescriptions.push(prescription);
+            updatePrescriptionsList();
+            showNotification(`Prescription "${file.name}" uploaded successfully!`);
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        function updatePrescriptionsList() {
+            const container = document.getElementById('uploadedPrescriptions');
+            
+            if (uploadedPrescriptions.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="text-left">
+                    <h5 class="font-medium text-sm mb-2">Uploaded Prescriptions:</h5>
+                    ${uploadedPrescriptions.map(prescription => `
+                        <div class="flex justify-between items-center p-2 bg-green-50 rounded mb-2">
+                            <div>
+                                <p class="text-sm font-medium">${prescription.name}</p>
+                                <p class="text-xs text-gray-600">${prescription.size} • ${prescription.uploadDate.toLocaleDateString()}</p>
+                            </div>
+                            <button onclick="removePrescription(${prescription.id})" class="text-red-500 text-xs hover:text-red-600">
+                                Remove
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function removePrescription(prescriptionId) {
+            uploadedPrescriptions = uploadedPrescriptions.filter(p => p.id !== prescriptionId);
+            updatePrescriptionsList();
+            showNotification('Prescription removed');
+        }
+
+        let doctorPrescriptions = [];
+
+        function generatePrescription(event) {
+            event.preventDefault();
+            
+            const patientName = document.getElementById('patientNameInput').value;
+            const details = document.getElementById('prescriptionDetailsInput').value;
+            
+            const prescription = {
+                id: Date.now(),
+                patientName: patientName,
+                details: details,
+                doctorName: currentUser.name,
+                date: new Date(),
+                status: 'active'
+            };
+            
+            doctorPrescriptions.push(prescription);
+            updateDoctorPrescriptionsList();
+            
+            // Clear form
+            document.getElementById('patientNameInput').value = '';
+            document.getElementById('prescriptionDetailsInput').value = '';
+            
+            showNotification(`Prescription generated for ${patientName}`);
+        }
+
+        function updateDoctorPrescriptionsList() {
+            const container = document.querySelector('#doctorPrescriptionsContent .space-y-3');
+            
+            if (!container) return;
+            
+            if (doctorPrescriptions.length === 0) {
+                container.innerHTML = `
+                    <div class="p-3 bg-gray-50 rounded-lg">
+                        <p class="text-gray-500 text-sm">No prescriptions created yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = doctorPrescriptions.map(prescription => `
+                <div class="p-3 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-medium">${prescription.patientName}</p>
+                            <p class="text-sm text-gray-600">Prescribed ${prescription.date.toLocaleDateString()}</p>
+                            <p class="text-sm text-gray-700 mt-1">${prescription.details.substring(0, 50)}...</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="viewPrescription(${prescription.id})" class="text-blue-500 text-sm hover:text-blue-600">
+                                View
+                            </button>
+                            <button onclick="deletePrescription(${prescription.id})" class="text-red-500 text-sm hover:text-red-600">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewPrescription(prescriptionId) {
+            const prescription = doctorPrescriptions.find(p => p.id === prescriptionId);
+            if (prescription) {
+                alert(`Prescription for ${prescription.patientName}:\n\n${prescription.details}\n\nPrescribed by: Dr. ${prescription.doctorName}\nDate: ${prescription.date.toLocaleDateString()}`);
+            }
+        }
+
+        function deletePrescription(prescriptionId) {
+            doctorPrescriptions = doctorPrescriptions.filter(p => p.id !== prescriptionId);
+            updateDoctorPrescriptionsList();
+            showNotification('Prescription deleted');
+        }
+
+        // Pharmacy Functions
+        function processOrder(orderId) {
+            showNotification(`Order #${orderId} is being processed...`);
+            setTimeout(() => {
+                showNotification(`Order #${orderId} processed and ready for dispatch!`);
+            }, 2000);
+        }
+
+        function dispatchOrder(orderId) {
+            showNotification(`Order #${orderId} dispatched for delivery!`);
+        }
+
+        function addMedicine() {
+            const name = prompt('Enter medicine name:');
+            const stock = prompt('Enter stock quantity:');
+            const price = prompt('Enter price per unit:');
+            
+            if (name && stock && price) {
+                showNotification(`${name} added to inventory with ${stock} units at ₹${price} each`);
+            }
+        }
+
+        function restockMedicine(medicineName) {
+            const quantity = prompt(`Enter restock quantity for ${medicineName}:`);
+            if (quantity) {
+                showNotification(`${medicineName} restocked with ${quantity} units`);
+            }
+        }
+
+        function verifyPrescription(prescriptionId) {
+            showNotification(`Prescription #${prescriptionId} verified successfully`);
+        }
+
+        function rejectPrescription(prescriptionId) {
+            const reason = prompt('Enter rejection reason:');
+            if (reason) {
+                showNotification(`Prescription #${prescriptionId} rejected: ${reason}`);
+            }
+        }
+
+        function assignDriver(orderId) {
+            const drivers = ['John Doe', 'Sarah Smith', 'Mike Johnson'];
+            const driver = drivers[Math.floor(Math.random() * drivers.length)];
+            showNotification(`Order #${orderId} assigned to driver ${driver}`);
+        }
+
+        function checkInteractions(medicineName) {
+            // Simple interaction checker
+            const interactions = {
+                'Aspirin': ['Warfarin (bleeding risk)', 'Alcohol (stomach irritation)'],
+                'Metformin': ['Alcohol (lactic acidosis risk)', 'Contrast dyes (kidney problems)'],
+                'Paracetamol': ['Alcohol (liver damage)', 'Warfarin (bleeding risk)']
+            };
+            
+            const medicineInteractions = interactions[medicineName] || ['No known major interactions'];
+            
+            showNotification(`Interactions for ${medicineName}: ${medicineInteractions.join(', ')}`);
+        }
+
+        // Doctor Search
+        function searchDoctors() {
+            const specialty = document.getElementById('specialtySelect').value;
+            
+            const doctors = [
+                { name: 'Dr. John Smith', specialty: 'cardiology', experience: 15, rating: 4.8, fee: 500, available: true },
+                { name: 'Dr. Sarah Johnson', specialty: 'dermatology', experience: 10, rating: 4.6, fee: 400, available: true },
+                { name: 'Dr. Mike Wilson', specialty: 'neurology', experience: 20, rating: 4.9, fee: 800, available: false },
+                { name: 'Dr. Emily Brown', specialty: 'orthopedics', experience: 12, rating: 4.7, fee: 600, available: true },
+                { name: 'Dr. David Lee', specialty: 'pediatrics', experience: 8, rating: 4.5, fee: 450, available: true },
+                { name: 'Dr. Lisa Chen', specialty: 'general', experience: 18, rating: 4.8, fee: 350, available: true },
+                { name: 'Dr. Robert Taylor', specialty: 'cardiology', experience: 25, rating: 4.9, fee: 750, available: true },
+                { name: 'Dr. Maria Garcia', specialty: 'dermatology', experience: 14, rating: 4.6, fee: 500, available: false }
+            ];
+            
+            const filteredDoctors = doctors.filter(doc => 
+                (!specialty || doc.specialty === specialty)
+            );
+            
+            const resultsContainer = document.getElementById('doctorSearchResults');
+            
+            if (filteredDoctors.length === 0) {
+                resultsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">No doctors found matching your criteria.</p>';
+                return;
+            }
+            
+            resultsContainer.innerHTML = `
+                <h4 class="font-medium text-gray-700 mb-4">Available Doctors (${filteredDoctors.length} found)</h4>
+                ${filteredDoctors.map(doc => `
+                    <div class="border border-gray-200 rounded-lg p-4 mb-4 ${!doc.available ? 'opacity-60' : ''}">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h5 class="font-semibold text-gray-800">${doc.name}</h5>
+                                <p class="text-sm text-gray-600">${doc.specialty.charAt(0).toUpperCase() + doc.specialty.slice(1)} • ${doc.experience} years experience</p>
+                                <p class="text-sm text-gray-600">⭐ ${doc.rating} rating</p>
+                                <p class="text-sm font-medium text-green-600">₹${doc.fee} consultation fee</p>
+                                <p class="text-xs ${doc.available ? 'text-green-600' : 'text-red-600'} mt-1">
+                                    ${doc.available ? '🟢 Available today' : '🔴 Not available'}
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="bookAppointment('${doc.name}', '${doc.specialty}', ${doc.fee})" 
+                                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm ${!doc.available ? 'opacity-50 cursor-not-allowed' : ''}"
+                                        ${!doc.available ? 'disabled' : ''}>
+                                    Book Appointment
+                                </button>
+                                <button onclick="startVideoConsult('${doc.name}', ${doc.fee})" 
+                                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm ${!doc.available ? 'opacity-50 cursor-not-allowed' : ''}"
+                                        ${!doc.available ? 'disabled' : ''}>
+                                    Video Consult
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function bookAppointment(doctorName, specialty, fee) {
+            const appointmentDate = new Date();
+            appointmentDate.setDate(appointmentDate.getDate() + 1); // Next day
+            appointmentDate.setHours(10, 0, 0, 0); // 10 AM
+            
+            const appointment = {
+                id: Date.now(),
+                doctor: doctorName,
+                specialty: specialty,
+                fee: fee,
+                date: appointmentDate,
+                time: '10:00 AM',
+                status: 'scheduled',
+                type: 'in-person'
+            };
+            
+            appointments.push(appointment);
+            saveUserData();
+            updatePatientStats();
+            updateAppointmentsList();
+            showNotification(`Appointment booked with ${doctorName} for tomorrow at 10:00 AM!`);
+        }
+
+        function startVideoConsult(doctorName, fee) {
+            const consultation = {
+                id: Date.now(),
+                doctor: doctorName,
+                fee: fee,
+                date: new Date(),
+                time: 'Now',
+                status: 'in-progress',
+                type: 'video'
+            };
+            
+            appointments.push(consultation);
+            saveUserData();
+            updatePatientStats();
+            updateAppointmentsList();
+            
+            // Simulate video consultation
+            showNotification(`Starting video consultation with ${doctorName}...`);
+            setTimeout(() => {
+                showNotification('Video consultation completed successfully!');
+                consultation.status = 'completed';
+                saveUserData();
+                updateAppointmentsList();
+            }, 3000);
+        }
+
+        // Medicine Modal Functions
+        function openAddMedicineModal() {
+            document.getElementById('addMedicineModal').classList.remove('hidden');
+            // Set today's date as default
+            document.getElementById('recordDate')?.setAttribute('value', new Date().toISOString().split('T')[0]);
+        }
+
+        function closeAddMedicineModal() {
+            document.getElementById('addMedicineModal').classList.add('hidden');
+            document.getElementById('addMedicineForm').reset();
+            document.getElementById('customTimesContainer').classList.add('hidden');
+        }
+
+        // Handle frequency change
+        document.getElementById('medicineFrequency')?.addEventListener('change', function() {
+            const customContainer = document.getElementById('customTimesContainer');
+            if (this.value === 'custom') {
+                customContainer.classList.remove('hidden');
+            } else {
+                customContainer.classList.add('hidden');
+            }
+        });
+
+        function addCustomTime() {
+            const container = document.getElementById('customTimesList');
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'flex items-center space-x-2';
+            timeDiv.innerHTML = `
+                <input type="time" class="custom-time px-3 py-2 border border-gray-300 rounded-lg">
+                <button type="button" onclick="removeCustomTime(this)" class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm">-</button>
+            `;
+            container.appendChild(timeDiv);
+        }
+
+        function removeCustomTime(button) {
+            button.parentElement.remove();
+        }
+
+        function addMedicineFromForm(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('medicineName').value;
+            const brand = document.getElementById('medicineBrand').value;
+            const dosage = document.getElementById('medicineDosage').value;
+            const frequency = document.getElementById('medicineFrequency').value;
+            const prescribedBy = document.getElementById('prescribedBy').value;
+            const duration = document.getElementById('medicineDuration').value;
+            const instructions = document.getElementById('medicineInstructions').value;
+            
+            // Get selected days
+            const selectedDays = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(cb => cb.value);
+            
+            // Get times based on frequency
+            let times = [];
+            if (frequency === 'once') {
+                times = ['09:00'];
+            } else if (frequency === 'twice') {
+                times = ['09:00', '21:00'];
+            } else if (frequency === 'thrice') {
+                times = ['09:00', '14:00', '21:00'];
+            } else if (frequency === 'custom') {
+                times = Array.from(document.querySelectorAll('.custom-time')).map(input => input.value).filter(time => time);
+            }
+            
+            // If editing, remove the old medicine first
+            if (window.editingMedicineId) {
+                medicines = medicines.filter(med => med.id !== window.editingMedicineId);
+                window.editingMedicineId = null;
+            }
+            
+            const medicine = {
+                id: Date.now(),
+                name: name,
+                brand: brand || 'Generic',
+                dosage: dosage,
+                frequency: frequency,
+                times: times,
+                days: selectedDays.length > 0 ? selectedDays : ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+                prescribedBy: prescribedBy || 'Self-prescribed',
+                duration: duration || 'As needed',
+                instructions: instructions || 'No special instructions',
+                active: true,
+                createdAt: new Date(),
+                startDate: new Date()
+            };
+            
+            medicines.push(medicine);
+            saveUserData();
+            updatePatientStats();
+            closeAddMedicineModal();
+            showNotification(`${name} ${window.editingMedicineId ? 'updated' : 'added to your medicine list'}!`);
+        }
+
+        // Health Records Functions
+        function openAddRecordModal() {
+            document.getElementById('addRecordModal').classList.remove('hidden');
+            // Set today's date and current time as defaults
+            const now = new Date();
+            document.getElementById('recordDate').value = now.toISOString().split('T')[0];
+            document.getElementById('recordTime').value = now.toTimeString().slice(0, 5);
+        }
+
+        function closeAddRecordModal() {
+            document.getElementById('addRecordModal').classList.add('hidden');
+            document.getElementById('addRecordForm').reset();
+            document.getElementById('dynamicFields').innerHTML = '';
+        }
+
+        function updateRecordFields() {
+            const recordType = document.getElementById('recordType').value;
+            const dynamicFields = document.getElementById('dynamicFields');
+            
+            let fieldsHTML = '';
+            
+            switch(recordType) {
+                case 'vitals':
+                    fieldsHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Blood Pressure</label>
+                                <input type="text" id="bloodPressure" placeholder="120/80" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Heart Rate (bpm)</label>
+                                <input type="number" id="heartRate" placeholder="72" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Temperature (°F)</label>
+                                <input type="number" step="0.1" id="temperature" placeholder="98.6" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                                <input type="number" step="0.1" id="weight" placeholder="70" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm)</label>
+                                <input type="number" id="height" placeholder="170" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'lab':
+                    fieldsHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Test Name *</label>
+                            <input type="text" id="testName" required placeholder="e.g., Blood Sugar, Cholesterol" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Result</label>
+                                <input type="text" id="testResult" placeholder="e.g., 95 mg/dL" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Reference Range</label>
+                                <input type="text" id="referenceRange" placeholder="e.g., 70-100 mg/dL" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lab/Hospital</label>
+                            <input type="text" id="labName" placeholder="Lab name" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    `;
+                    break;
+                case 'appointment':
+                    fieldsHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Doctor Name *</label>
+                                <input type="text" id="doctorName" required placeholder="Dr. Name" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Specialty</label>
+                                <input type="text" id="doctorSpecialty" placeholder="e.g., Cardiology" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Visit</label>
+                            <input type="text" id="visitReason" placeholder="e.g., Regular checkup, Follow-up" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Diagnosis/Outcome</label>
+                            <textarea id="diagnosis" rows="3" placeholder="Doctor's diagnosis or recommendations..." class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        </div>
+                    `;
+                    break;
+                case 'symptom':
+                    fieldsHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Symptom *</label>
+                            <input type="text" id="symptomName" required placeholder="e.g., Headache, Fever" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Severity (1-10)</label>
+                                <input type="number" id="severity" min="1" max="10" placeholder="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+                                <input type="text" id="duration" placeholder="e.g., 2 hours, 3 days" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Triggers/Causes</label>
+                            <input type="text" id="triggers" placeholder="What might have caused this?" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    `;
+                    break;
+                case 'allergy':
+                    fieldsHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Allergen *</label>
+                            <input type="text" id="allergen" required placeholder="e.g., Peanuts, Penicillin" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Reaction</label>
+                            <textarea id="reaction" rows="3" placeholder="Describe the allergic reaction..." class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Severity</label>
+                            <select id="allergySeverity" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option value="">Select severity</option>
+                                <option value="mild">Mild</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="severe">Severe</option>
+                                <option value="life-threatening">Life-threatening</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'vaccination':
+                    fieldsHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Vaccine Name *</label>
+                                <input type="text" id="vaccineName" required placeholder="e.g., COVID-19, Flu" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dose Number</label>
+                                <input type="text" id="doseNumber" placeholder="e.g., 1st dose, Booster" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Healthcare Provider</label>
+                                <input type="text" id="vaccineProvider" placeholder="Hospital/Clinic name" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Batch/Lot Number</label>
+                                <input type="text" id="batchNumber" placeholder="Vaccine batch number" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                default:
+                    fieldsHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                            <input type="text" id="recordTitle" required placeholder="Brief title for this record" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea id="recordDescription" rows="4" placeholder="Detailed description..." class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        </div>
+                    `;
+            }
+            
+            dynamicFields.innerHTML = fieldsHTML;
+        }
+
+        function addHealthRecord(event) {
+            event.preventDefault();
+            
+            const recordType = document.getElementById('recordType').value;
+            const recordDate = document.getElementById('recordDate').value;
+            const recordTime = document.getElementById('recordTime').value;
+            const recordNotes = document.getElementById('recordNotes').value;
+            
+            let recordData = {
+                id: Date.now(),
+                type: recordType,
+                date: recordDate,
+                time: recordTime,
+                notes: recordNotes,
+                createdAt: new Date()
+            };
+            
+            // Add type-specific data
+            switch(recordType) {
+                case 'vitals':
+                    recordData.bloodPressure = document.getElementById('bloodPressure')?.value;
+                    recordData.heartRate = document.getElementById('heartRate')?.value;
+                    recordData.temperature = document.getElementById('temperature')?.value;
+                    recordData.weight = document.getElementById('weight')?.value;
+                    recordData.height = document.getElementById('height')?.value;
+                    break;
+                case 'lab':
+                    recordData.testName = document.getElementById('testName')?.value;
+                    recordData.testResult = document.getElementById('testResult')?.value;
+                    recordData.referenceRange = document.getElementById('referenceRange')?.value;
+                    recordData.labName = document.getElementById('labName')?.value;
+                    break;
+                case 'appointment':
+                    recordData.doctorName = document.getElementById('doctorName')?.value;
+                    recordData.doctorSpecialty = document.getElementById('doctorSpecialty')?.value;
+                    recordData.visitReason = document.getElementById('visitReason')?.value;
+                    recordData.diagnosis = document.getElementById('diagnosis')?.value;
+                    break;
+                case 'symptom':
+                    recordData.symptomName = document.getElementById('symptomName')?.value;
+                    recordData.severity = document.getElementById('severity')?.value;
+                    recordData.duration = document.getElementById('duration')?.value;
+                    recordData.triggers = document.getElementById('triggers')?.value;
+                    break;
+                case 'allergy':
+                    recordData.allergen = document.getElementById('allergen')?.value;
+                    recordData.reaction = document.getElementById('reaction')?.value;
+                    recordData.allergySeverity = document.getElementById('allergySeverity')?.value;
+                    break;
+                case 'vaccination':
+                    recordData.vaccineName = document.getElementById('vaccineName')?.value;
+                    recordData.doseNumber = document.getElementById('doseNumber')?.value;
+                    recordData.vaccineProvider = document.getElementById('vaccineProvider')?.value;
+                    recordData.batchNumber = document.getElementById('batchNumber')?.value;
+                    break;
+                default:
+                    recordData.title = document.getElementById('recordTitle')?.value;
+                    recordData.description = document.getElementById('recordDescription')?.value;
+            }
+            
+            healthRecords.push(recordData);
+            saveUserData();
+            updateHealthRecordsList();
+            updatePatientStats();
+            closeAddRecordModal();
+            showNotification(`Health record added successfully!`);
+        }
+
+        function updateHealthRecordsList() {
+            const container = document.getElementById('healthRecordsList');
+            
+            if (healthRecords.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <span class="text-4xl mb-4 block">📋</span>
+                        <p>No health records yet. Click "Add Record" to start tracking!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort records by date (newest first)
+            const sortedRecords = [...healthRecords].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = sortedRecords.map(record => {
+                const typeIcons = {
+                    vitals: '💓',
+                    lab: '🧪',
+                    appointment: '👨‍⚕️',
+                    medication: '💊',
+                    symptom: '🤒',
+                    allergy: '⚠️',
+                    vaccination: '💉',
+                    surgery: '🏥',
+                    other: '📝'
+                };
+                
+                const typeColors = {
+                    vitals: 'bg-red-50 border-red-200',
+                    lab: 'bg-blue-50 border-blue-200',
+                    appointment: 'bg-green-50 border-green-200',
+                    medication: 'bg-purple-50 border-purple-200',
+                    symptom: 'bg-orange-50 border-orange-200',
+                    allergy: 'bg-yellow-50 border-yellow-200',
+                    vaccination: 'bg-indigo-50 border-indigo-200',
+                    surgery: 'bg-gray-50 border-gray-200',
+                    other: 'bg-gray-50 border-gray-200'
+                };
+                
+                return `
+                    <div class="border rounded-lg p-4 ${typeColors[record.type] || 'bg-gray-50 border-gray-200'}">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-xl mr-2">${typeIcons[record.type] || '📝'}</span>
+                                    <h4 class="font-medium text-gray-800 capitalize">${record.type.replace('_', ' ')}</h4>
+                                    <span class="ml-auto text-sm text-gray-500">${new Date(record.date).toLocaleDateString()}</span>
+                                </div>
+                                ${getRecordSummary(record)}
+                                ${record.notes ? `<p class="text-sm text-gray-600 mt-2"><strong>Notes:</strong> ${record.notes}</p>` : ''}
+                            </div>
+                            <div class="ml-4 flex space-x-2">
+                                <button onclick="viewHealthRecord(${record.id})" class="text-blue-500 hover:text-blue-600 text-sm">
+                                    View
+                                </button>
+                                <button onclick="deleteHealthRecord(${record.id})" class="text-red-500 hover:text-red-600 text-sm">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getRecordSummary(record) {
+            switch(record.type) {
+                case 'vitals':
+                    const vitals = [];
+                    if (record.bloodPressure) vitals.push(`BP: ${record.bloodPressure}`);
+                    if (record.heartRate) vitals.push(`HR: ${record.heartRate} bpm`);
+                    if (record.temperature) vitals.push(`Temp: ${record.temperature}°F`);
+                    if (record.weight) vitals.push(`Weight: ${record.weight} kg`);
+                    return `<p class="text-sm text-gray-700">${vitals.join(' • ')}</p>`;
+                case 'lab':
+                    return `<p class="text-sm text-gray-700"><strong>${record.testName}:</strong> ${record.testResult || 'Pending'}</p>`;
+                case 'appointment':
+                    return `<p class="text-sm text-gray-700"><strong>Dr. ${record.doctorName}</strong> - ${record.visitReason || 'Consultation'}</p>`;
+                case 'symptom':
+                    return `<p class="text-sm text-gray-700"><strong>${record.symptomName}</strong> ${record.severity ? `(Severity: ${record.severity}/10)` : ''}</p>`;
+                case 'allergy':
+                    return `<p class="text-sm text-gray-700"><strong>Allergen:</strong> ${record.allergen} ${record.allergySeverity ? `(${record.allergySeverity})` : ''}</p>`;
+                case 'vaccination':
+                    return `<p class="text-sm text-gray-700"><strong>${record.vaccineName}</strong> ${record.doseNumber ? `- ${record.doseNumber}` : ''}</p>`;
+                default:
+                    return `<p class="text-sm text-gray-700">${record.title || record.description?.substring(0, 100) || 'No details'}</p>`;
+            }
+        }
+
+        function viewHealthRecord(recordId) {
+            const record = healthRecords.find(r => r.id === recordId);
+            if (!record) return;
+            
+            let details = `Date: ${new Date(record.date).toLocaleDateString()}\n`;
+            if (record.time) details += `Time: ${record.time}\n`;
+            details += `Type: ${record.type.charAt(0).toUpperCase() + record.type.slice(1)}\n\n`;
+            
+            // Add type-specific details
+            Object.keys(record).forEach(key => {
+                if (!['id', 'type', 'date', 'time', 'notes', 'createdAt'].includes(key) && record[key]) {
+                    const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    details += `${label}: ${record[key]}\n`;
+                }
+            });
+            
+            if (record.notes) details += `\nNotes: ${record.notes}`;
+            
+            alert(details);
+        }
+
+        function deleteHealthRecord(recordId) {
+            if (confirm('Are you sure you want to delete this health record?')) {
+                healthRecords = healthRecords.filter(r => r.id !== recordId);
+                saveUserData();
+                updateHealthRecordsList();
+                updatePatientStats();
+                showNotification('Health record deleted');
+            }
+        }
+
+        // Enhanced Health Trackers
+        function openHealthTracker(type) {
+            if (type === 'bmi') {
+                const height = prompt('Enter your height in cm:');
+                const weight = prompt('Enter your weight in kg:');
+                if (height && weight) {
+                    const bmi = (weight / ((height/100) ** 2)).toFixed(1);
+                    let category = '';
+                    if (bmi < 18.5) category = 'Underweight';
+                    else if (bmi < 25) category = 'Normal';
+                    else if (bmi < 30) category = 'Overweight';
+                    else category = 'Obese';
+                    
+                    // Auto-add to health records
+                    const record = {
+                        id: Date.now(),
+                        type: 'vitals',
+                        date: new Date().toISOString().split('T')[0],
+                        time: new Date().toTimeString().slice(0, 5),
+                        height: height,
+                        weight: weight,
+                        notes: `BMI calculated: ${bmi} (${category})`,
+                        createdAt: new Date()
+                    };
+                    
+                    healthRecords.push(record);
+                    saveUserData();
+                    updateHealthRecordsList();
+                    showNotification(`BMI: ${bmi} (${category}) - Added to health records`);
+                }
+            } else if (type === 'bp') {
+                const systolic = prompt('Enter systolic pressure:');
+                const diastolic = prompt('Enter diastolic pressure:');
+                if (systolic && diastolic) {
+                    const record = {
+                        id: Date.now(),
+                        type: 'vitals',
+                        date: new Date().toISOString().split('T')[0],
+                        time: new Date().toTimeString().slice(0, 5),
+                        bloodPressure: `${systolic}/${diastolic}`,
+                        notes: 'Blood pressure reading',
+                        createdAt: new Date()
+                    };
+                    
+                    healthRecords.push(record);
+                    saveUserData();
+                    updateHealthRecordsList();
+                    showNotification(`Blood pressure ${systolic}/${diastolic} mmHg recorded`);
+                }
+            } else if (type === 'sugar') {
+                const level = prompt('Enter blood sugar level (mg/dL):');
+                if (level) {
+                    const record = {
+                        id: Date.now(),
+                        type: 'lab',
+                        date: new Date().toISOString().split('T')[0],
+                        time: new Date().toTimeString().slice(0, 5),
+                        testName: 'Blood Sugar',
+                        testResult: `${level} mg/dL`,
+                        referenceRange: '70-100 mg/dL (fasting)',
+                        notes: 'Self-monitored blood glucose',
+                        createdAt: new Date()
+                    };
+                    
+                    healthRecords.push(record);
+                    saveUserData();
+                    updateHealthRecordsList();
+                    showNotification(`Blood sugar ${level} mg/dL recorded`);
+                }
+            } else if (type === 'weight') {
+                const weight = prompt('Enter your current weight in kg:');
+                if (weight) {
+                    const record = {
+                        id: Date.now(),
+                        type: 'vitals',
+                        date: new Date().toISOString().split('T')[0],
+                        time: new Date().toTimeString().slice(0, 5),
+                        weight: weight,
+                        notes: 'Weight tracking',
+                        createdAt: new Date()
+                    };
+                    
+                    healthRecords.push(record);
+                    saveUserData();
+                    updateHealthRecordsList();
+                    showNotification(`Weight ${weight} kg recorded`);
+                }
+            }
+        }
+
+        // Stats Updates
+        // Patient Stats Update
+function updatePatientStats() {
+    document.getElementById('patientMedicines').textContent = currentUser.medicineCount;
+    document.getElementById('patientAppointments').textContent = currentUser.appointmentCount;
+    document.getElementById('patientRecords').textContent = currentUser.recordCount;
+    updateAppointmentsList();
+    updateMedicinesList();
+    updateHealthRecordsList();
+}
+
+// Doctor Stats Update
+function updateDoctorStats() {
+    document.getElementById('doctorPatients').textContent = currentUser.todaysPatients;
+    document.getElementById('doctorAppointments').textContent = currentUser.todaysAppointments;
+    document.getElementById('doctorEarnings').textContent = `₹${currentUser.todaysEarnings}`;
+}
+
+// Pharmacy Stats Update
+function updatePharmacyStats() {
+    document.getElementById('pharmacyOrders').textContent = currentUser.todaysOrders;
+    document.getElementById('inventoryItems').textContent = currentUser.inventoryItems;
+    document.getElementById('lowStock').textContent = currentUser.lowStock;
+    document.getElementById('pharmacyRevenue').textContent = `₹${currentUser.todaysRevenue}`;
+}
+
+        function updateAppointmentsList() {
+            const appointmentsList = document.getElementById('patientAppointmentsList');
+            
+            if (appointments.length === 0) {
+                appointmentsList.innerHTML = '<p class="text-gray-500 text-sm">No appointments scheduled</p>';
+                return;
+            }
+            
+            appointmentsList.innerHTML = appointments.map(apt => `
+                <div class="p-3 bg-gray-50 rounded-lg mb-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-medium text-sm">${apt.doctor}</p>
+                            <p class="text-xs text-gray-600">${apt.specialty} • ${apt.type}</p>
+                            <p class="text-xs text-blue-600">${apt.time} • ₹${apt.fee}</p>
+                        </div>
+                        <span class="px-2 py-1 rounded text-xs ${
+                            apt.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                            apt.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-green-100 text-green-800'
+                        }">
+                            ${apt.status}
+                        </span>
+                    </div>
+                    ${apt.status === 'scheduled' ? `
+                        <button onclick="cancelAppointment(${apt.id})" class="text-red-500 text-xs mt-2 hover:text-red-600">
+                            Cancel
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateMedicinesList() {
+            const medicinesList = document.getElementById('patientMedicineList');
+            
+            if (medicines.length === 0) {
+                medicinesList.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <span class="text-4xl mb-4 block">💊</span>
+                        <p>No medicines added yet. Click "Add Medicine" to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            medicinesList.innerHTML = medicines.map(med => `
+                <div class="border border-gray-200 rounded-lg p-4 mb-4 medicine-card">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <h4 class="font-semibold text-gray-800 text-lg">${med.name}</h4>
+                                <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">${med.brand}</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                <div>
+                                    <p class="text-sm text-gray-600"><strong>Dosage:</strong> ${med.dosage}</p>
+                                    <p class="text-sm text-gray-600"><strong>Frequency:</strong> ${med.frequency.charAt(0).toUpperCase() + med.frequency.slice(1)}</p>
+                                    <p class="text-sm text-blue-600"><strong>Times:</strong> ${med.times.join(', ')}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600"><strong>Prescribed by:</strong> ${med.prescribedBy}</p>
+                                    <p class="text-sm text-gray-600"><strong>Duration:</strong> ${med.duration}</p>
+                                    <p class="text-sm text-gray-600"><strong>Days:</strong> ${med.days.map(d => d.charAt(0).toUpperCase() + d.slice(1, 3)).join(', ')}</p>
+                                </div>
+                            </div>
+                            ${med.instructions ? `<p class="text-sm text-gray-700 bg-gray-50 p-2 rounded"><strong>Instructions:</strong> ${med.instructions}</p>` : ''}
+                        </div>
+                        <div class="ml-4 flex flex-col space-y-2">
+                            <button onclick="toggleMedicineReminder(${med.id})" class="px-3 py-1 rounded text-sm font-medium ${
+                                med.active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                            }">
+                                ${med.active ? '✓ Active' : '⏸ Paused'}
+                            </button>
+                            <button onclick="editMedicine(${med.id})" class="px-3 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200 rounded text-sm font-medium">
+                                Edit
+                            </button>
+                            <button onclick="removeMedicine(${med.id})" class="px-3 py-1 bg-red-100 text-red-800 hover:bg-red-200 rounded text-sm font-medium">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editMedicine(medicineId) {
+            const medicine = medicines.find(med => med.id === medicineId);
+            if (!medicine) return;
+            
+            // Pre-fill the form with existing data
+            document.getElementById('medicineName').value = medicine.name;
+            document.getElementById('medicineBrand').value = medicine.brand;
+            document.getElementById('medicineDosage').value = medicine.dosage;
+            document.getElementById('medicineFrequency').value = medicine.frequency;
+            document.getElementById('prescribedBy').value = medicine.prescribedBy;
+            document.getElementById('medicineDuration').value = medicine.duration;
+            document.getElementById('medicineInstructions').value = medicine.instructions;
+            
+            // Set selected days
+            medicine.days.forEach(day => {
+                const checkbox = document.querySelector(`input[name="days"][value="${day}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+            
+            // Handle custom times if needed
+            if (medicine.frequency === 'custom') {
+                document.getElementById('customTimesContainer').classList.remove('hidden');
+                const container = document.getElementById('customTimesList');
+                container.innerHTML = '';
+                medicine.times.forEach((time, index) => {
+                    const timeDiv = document.createElement('div');
+                    timeDiv.className = 'flex items-center space-x-2';
+                    timeDiv.innerHTML = `
+                        <input type="time" class="custom-time px-3 py-2 border border-gray-300 rounded-lg" value="${time}">
+                        ${index === 0 ? 
+                            '<button type="button" onclick="addCustomTime()" class="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm">+</button>' :
+                            '<button type="button" onclick="removeCustomTime(this)" class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm">-</button>'
+                        }
+                    `;
+                    container.appendChild(timeDiv);
+                });
+            }
+            
+            // Remove the old medicine when form is submitted
+            window.editingMedicineId = medicineId;
+            
+            openAddMedicineModal();
+        }
+
+        function cancelAppointment(appointmentId) {
+            const index = appointments.findIndex(apt => apt.id === appointmentId);
+            if (index !== -1) {
+                const appointment = appointments[index];
+                appointments.splice(index, 1);
+                saveUserData();
+                updatePatientStats();
+                showNotification(`Appointment with ${appointment.doctor} cancelled`);
+            }
+        }
+
+        function toggleMedicineReminder(medicineId) {
+            const medicine = medicines.find(med => med.id === medicineId);
+            if (medicine) {
+                medicine.active = !medicine.active;
+                saveUserData();
+                updateMedicinesList();
+                showNotification(`Medicine reminder ${medicine.active ? 'activated' : 'paused'}`);
+            }
+        }
+
+        function removeMedicine(medicineId) {
+            const index = medicines.findIndex(med => med.id === medicineId);
+            if (index !== -1) {
+                const medicine = medicines[index];
+                medicines.splice(index, 1);
+                saveUserData();
+                updatePatientStats();
+                showNotification(`${medicine.name} removed from reminders`);
+            }
+        }
+
+        function updateDoctorStats() {
+            // Sample data for doctor dashboard
+        }
+
+        function updatePharmacyStats() {
+            // Sample data for pharmacy dashboard
+        }
+
+        function saveUserData() {
+            if (!currentUser) return;
+            
+            currentUser.medicines = medicines;
+            currentUser.appointments = appointments;
+            currentUser.prescriptions = prescriptions;
+            currentUser.inventory = inventory;
+            currentUser.healthRecords = healthRecords;
+            
+            const users = JSON.parse(localStorage.getItem('medicareUsers') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('medicareUsers', JSON.stringify(users));
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg notification z-50 ${
+                type === 'error' ? 'bg-red-500' : 'bg-green-500'
+            } text-white`;
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Initialize app
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadUserData();
+                showDashboard();
+            }
+        });
+
+        // Update time immediately
+        updateTime();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e8388ec05a3c40',t:'MTc1Nzc3MjU1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
